@@ -15,6 +15,7 @@
             <h3>Welcome <?php echo $this->session->userdata['fullname']?>! Logged in Successfully</h3>
             <hr>
             <div style="text-align: center">
+                <a href="<?php echo base_url().'login/change_password'?>" class="btn btn-link">Change Password</a> |
                 <a href="<?php echo base_url().'login/logout'?>">Logout</a>
             </div>
 
