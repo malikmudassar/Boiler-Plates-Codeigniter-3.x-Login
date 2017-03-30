@@ -31,7 +31,7 @@ Go to application->config->database.php
 Change the database name and user credentials as per your local machine
 
 # Step - 3
-Browse via http://localhost/boilerplate/Login
+Browse via http://localhost/Boiler-Plates-Codeigniter-3.x-Login/Login
 
 if you want the login controller to load automatically, set it as default_controller in routes
 
