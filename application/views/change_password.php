@@ -33,6 +33,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary"> Update </button>
+                    <a href="<?php echo base_url().'Login'?>" class="btn btn-danger">Cancel</a>
                 </div>
             </form>
         </div>
