@@ -11,7 +11,6 @@
 <body>
 <div class="container">
     <div class="row" style="padding-top: 50px; ">
-
         <div class="col-md-4 col-md-offset-4" style="padding-top:30px;background-color:#f9f6f6 ;box-shadow: 5px 5px 5px grey;">
             <?php if(isset($errors)){?>
                 <div class="alert alert-danger">
@@ -19,18 +18,21 @@
                     <?php print_r($errors);?>
                 </div>
             <?php }?>
-
             <form action="" method="post">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control" name="username"/>
+                    <label>Old Password</label>
+                    <input type="password" class="form-control" name="old_password"/>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="text" class="form-control" name="password"/>
+                    <label>New Password</label>
+                    <input type="password" class="form-control" name="password"/>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"> Login </button>
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control" name="conf_password" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"> Update </button>
                 </div>
             </form>
         </div>

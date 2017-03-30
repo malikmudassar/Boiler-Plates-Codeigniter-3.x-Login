@@ -1,40 +1,91 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<?php
 
-<head>
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <title><?php echo $title;?></title>
-</head>
-<body>
-<div class="container">
-    <div class="row" style="padding-top: 50px; ">
-        <div class="col-md-4 col-md-offset-4" style="padding-top:30px;background-color:#f9f6f6 ;box-shadow: 5px 5px 5px grey;">
-            <?php if(isset($errors)){?>
-                <div class="alert alert-danger">
-                    <h4>Errors!</h4>
-                    <?php print_r($errors);?>
-                </div>
-            <?php }?>
-            <form action="" method="post">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control" name="username"/>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="text" class="form-control" name="password"/>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary"> Login </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</body>
+class Login extends CI_Controller {
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Login_model');
+        $this->load->library('form_validation');
+    }
 
-</html>
+    public function index()
+    {
+        if($this->isLoggedin()){ redirect(base_url().'login/dashboard');}
+        $data['title']='Login Boiler Plate';
+        if($_POST)
+        {
+            $config=array(
+                array(
+                    'field' => 'username',
+                    'label' => 'Username',
+                    'rules' => 'trim|required'
+                ),
+                array(
+                    'field' => 'password',
+                    'label' => 'Password',
+                    'rules' => 'trim|required'
+                )
+            );
+            $this->form_validation->set_rules($config);
+            if ($this->form_validation->run() == false) {
+                // if validation has errors, save those errors in variable and send it to view
+                $data['errors'] = validation_errors();
+                $this->load->view('login',$data);
+            } else {
+                // if validation passes, check for user credentials from database
+                $user = $this->Login_model->checkUser($_POST);
+                if ($user) {
+                // if an record of user is returned from model, save it in session and send user to dashboard
+                    $this->session->set_userdata($user);
+                    redirect(base_url() . 'Login/dashboard');
+                } else {
+                // if nothing returns from model , show an error
+                    $data['errors'] = 'Sorry! The credentials you have provided are not correct';
+                    $this->load->view('login',$data);
+                }
+            }
+
+        }
+        else
+        {
+            $this->load->view('login',$data);
+        }
+
+    }
+
+    public function dashboard()
+    {
+        if($this->isLoggedin())
+        {
+            $data['title']='Welcome! You are logged in';
+            $this->load->view('success',$data);
+        }
+        else
+        {
+            redirect(base_url().'Login');
+        }
+    }
+
+    public function logout()
+    {
+        $this->session->sess_destroy();
+        redirect(base_url().'Login');
+    }
+
+    public function test()
+    {
+        echo sha1(md5('john'));
+    }
+    public function isLoggedin()
+    {
+        if(!empty($this->session->userdata['id']))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
 

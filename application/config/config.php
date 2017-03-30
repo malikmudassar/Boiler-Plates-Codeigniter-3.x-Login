@@ -16,7 +16,7 @@
 | environments.
 |
 */
-$config['base_url'] = 'http://'.$_SERVER['SERVER_NAME'].'/boilerplate/';
+$config['base_url'] = 'http://'.$_SERVER['SERVER_NAME'].'/Boiler-Plates-Codeigniter-3.x-Login/';
 
 /*
 |--------------------------------------------------------------------------
