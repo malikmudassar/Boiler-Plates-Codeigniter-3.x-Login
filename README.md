@@ -42,4 +42,6 @@ Password: john
 
 ========================================
 
-Note: This is basic version of the boiler plate without security 
+# Security
+
+For security I am using Codeigniter's Security Class. 
