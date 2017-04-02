@@ -12,6 +12,10 @@ class Login extends CI_Controller {
     {
         if($this->isLoggedin()){ redirect(base_url().'login/dashboard');}
         $data['title']='Login Boiler Plate';
+        $data['csrf'] = array(
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        );
         if($_POST)
         {
             $config=array(
@@ -30,10 +34,15 @@ class Login extends CI_Controller {
             if ($this->form_validation->run() == false) {
                 // if validation has errors, save those errors in variable and send it to view
                 $data['errors'] = validation_errors();
+                $data['csrf'] = array(
+                    'name' => $this->security->get_csrf_token_name(),
+                    'hash' => $this->security->get_csrf_hash()
+                );
                 $this->load->view('login',$data);
             } else {
                 // if validation passes, check for user credentials from database
-                $user = $this->Login_model->checkUser($_POST);
+                $data = $this->security->xss_clean($_POST);
+                $user = $this->Login_model->checkUser($data);
                 if ($user) {
                 // if an record of user is returned from model, save it in session and send user to dashboard
                     $this->session->set_userdata($user);

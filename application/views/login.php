@@ -29,6 +29,7 @@
                     <label>Password</label>
                     <input type="text" class="form-control" name="password"/>
                 </div>
+                <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary"> Login </button>
                 </div>
