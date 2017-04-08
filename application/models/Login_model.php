@@ -49,4 +49,17 @@ class Login_model extends CI_Model{
         );
         $this->db->WHERE('id',$id)->update('users',$pass);
     }
+
+    public function register($data)
+    {
+        $data=$this->security->xss_clean($data);
+        $user=array(
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => sha1(md5($data['password'])),
+            'fullname' => $data['fullname'],
+        );
+        $this->db->insert('users',$user);
+        return $this->db->insert_id();
+    }
 }

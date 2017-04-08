@@ -12,10 +12,6 @@ class Login extends CI_Controller {
     {
         if($this->isLoggedin()){ redirect(base_url().'login/dashboard');}
         $data['title']='Login Boiler Plate';
-        $data['csrf'] = array(
-            'name' => $this->security->get_csrf_token_name(),
-            'hash' => $this->security->get_csrf_hash()
-        );
         if($_POST)
         {
             $config=array(
@@ -58,6 +54,10 @@ class Login extends CI_Controller {
         }
         else
         {
+            $data['csrf'] = array(
+                'name' => $this->security->get_csrf_token_name(),
+                'hash' => $this->security->get_csrf_hash()
+            );
             $this->load->view('login',$data);
         }
 
@@ -114,6 +114,67 @@ class Login extends CI_Controller {
 
     }
 
+    public function register()
+    {
+        $data['csrf'] = array(
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        );
+        if(!$this->isLoggedin()){
+            $data['title']='Register';
+            if($_POST)
+            {
+                $config=array(
+                    array(
+                        'field' => 'username',
+                        'label' => 'Username',
+                        'rules' => 'trim|required'
+                    ),
+                    array(
+                        'field' => 'fullname',
+                        'label' => 'Full Name',
+                        'rules' => 'trim|required'
+                    ),
+                    array(
+                        'field' => 'email',
+                        'label' => 'Email',
+                        'rules' => 'trim|required|is_unique[users.email]'
+                    ),
+                    array(
+                        'field' => 'password',
+                        'label' => 'Password',
+                        'rules' => 'trim|required'
+                    )
+                );
+                $this->form_validation->set_rules($config);
+                if ($this->form_validation->run() == false)
+                {
+                    // if validation has errors, save those errors in variable and send it to view
+                    $data['errors'] = validation_errors();
+                    $this->load->view('register',$data);
+                }
+                else
+                {
+                    // if validation passes, check for user credentials from database
+                    $this->Login_model->register($_POST);
+                    // You can send Email here for account activation
+                    $this->session->set_flashdata('log_success','Congratulations! You are registered.');
+                    redirect(base_url() . 'Login');
+                }
+
+            }
+            else
+            {
+                $this->load->view('register',$data);
+            }
+        }
+        else
+        {
+            redirect(base_url().'Login');
+        }
+
+    }
+
     public function checkPassword($str)
     {
         $check=$this->Login_model->checkPassword($str);
@@ -158,5 +219,7 @@ class Login extends CI_Controller {
             return false;
         }
     }
+
+
 }
 
