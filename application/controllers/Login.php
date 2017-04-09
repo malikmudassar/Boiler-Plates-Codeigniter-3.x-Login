@@ -47,6 +47,10 @@ class Login extends CI_Controller {
                 } else {
                 // if nothing returns from model , show an error
                     $data['errors'] = 'Sorry! The credentials you have provided are not correct';
+                    $data['csrf'] = array(
+                        'name' => $this->security->get_csrf_token_name(),
+                        'hash' => $this->security->get_csrf_hash()
+                    );
                     $this->load->view('login',$data);
                 }
             }

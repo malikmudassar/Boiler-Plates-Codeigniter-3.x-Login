@@ -19,7 +19,11 @@
                     <?php print_r($errors);?>
                 </div>
             <?php }?>
-
+            <?php if($this->session->flashdata('log_success')){?>
+                <div class="alert alert-success">
+                    <?php echo $this->session->flashdata('log_success');?>
+                </div>
+            <?php }?>
             <form action="" method="post">
                 <div class="form-group">
                     <label>Username</label>
