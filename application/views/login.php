@@ -11,7 +11,16 @@
 <body>
 <div class="container">
     <div class="row" style="padding-top: 50px; ">
-
+        <?php if($this->session->flashdata('log_success')){?>
+            <div class="alert alert-success">
+                <?php echo $this->session->flashdata('log_success');?>
+            </div>
+        <?php }?>
+        <?php if($this->session->flashdata('log_error')){?>
+            <div class="alert alert-danger">
+                <?php echo $this->session->flashdata('log_error');?>
+            </div>
+        <?php }?>
         <div class="col-md-4 col-md-offset-4" style="padding-top:30px;background-color:#f9f6f6 ;box-shadow: 5px 5px 5px grey;">
             <?php if(isset($errors)){?>
                 <div class="alert alert-danger">
@@ -19,11 +28,7 @@
                     <?php print_r($errors);?>
                 </div>
             <?php }?>
-            <?php if($this->session->flashdata('log_success')){?>
-                <div class="alert alert-success">
-                    <?php echo $this->session->flashdata('log_success');?>
-                </div>
-            <?php }?>
+
             <form action="" method="post">
                 <div class="form-group">
                     <label>Username</label>

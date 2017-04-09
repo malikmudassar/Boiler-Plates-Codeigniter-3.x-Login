@@ -58,8 +58,26 @@ class Login_model extends CI_Model{
             'email' => $data['email'],
             'password' => sha1(md5($data['password'])),
             'fullname' => $data['fullname'],
+            'hash' => sha1(md5($this->session->userdata['session_id']))
         );
         $this->db->insert('users',$user);
         return $this->db->insert_id();
+    }
+
+    public function activateAccount($id,$hash)
+    {
+        $st=$this->db->select('*')->from('users')->WHERE('id',$id)->WHERE('hash',$hash)->get()->row();
+        if($st)
+        {
+            $status=array(
+              'status' => 'approved'
+            );
+            $this->db->WHERE('id',$id)->WHERE('users',$status);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

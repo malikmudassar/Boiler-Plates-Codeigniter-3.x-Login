@@ -34,6 +34,7 @@ class Login extends CI_Controller {
                     'name' => $this->security->get_csrf_token_name(),
                     'hash' => $this->security->get_csrf_hash()
                 );
+                $data['title']='Login Boiler Plate';
                 $this->load->view('login',$data);
             } else {
                 // if validation passes, check for user credentials from database
@@ -51,6 +52,7 @@ class Login extends CI_Controller {
                         'name' => $this->security->get_csrf_token_name(),
                         'hash' => $this->security->get_csrf_hash()
                     );
+                    $data['title']='Login Boiler Plate';
                     $this->load->view('login',$data);
                 }
             }
@@ -160,9 +162,10 @@ class Login extends CI_Controller {
                 else
                 {
                     // if validation passes, check for user credentials from database
-                    $this->Login_model->register($_POST);
+                    $id=$this->Login_model->register($_POST);
                     // You can send Email here for account activation
-                    $this->session->set_flashdata('log_success','Congratulations! You are registered.');
+                    $this->session->set_flashdata('log_success','Congratulations! You are registered. Please Click on <a href='.base_url().'login/activate/'.$id.'/'.sha1(md5($this->session->userdata['session_id'])).'>this Link</a> to activate your account.
+                     ');
                     redirect(base_url() . 'Login');
                 }
 
@@ -177,6 +180,23 @@ class Login extends CI_Controller {
             redirect(base_url().'Login');
         }
 
+    }
+
+    public function activate()
+    {
+        $id=$this->uri->segment(3);
+        $hash=$this->uri->segment(4);
+        $check=$this->Login_model->activateAccount($id,$hash);
+        if($check)
+        {
+            $this->session->set_flashdata('log_success','Account Activated Successfully');
+            redirect(base_url().'login');
+        }
+        else
+        {
+            $this->session->set_flashdata('log_error','Incorrect Hash, Please try again');
+            redirect(base_url().'login');
+        }
     }
 
     public function checkPassword($str)
